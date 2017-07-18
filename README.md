@@ -31,7 +31,7 @@ Create a demonstration dataset by using randomly sampled locations from the CAGI
 
 ``` r
 library(sf)
-#> Linking to GEOS 3.6.1, GDAL 2.1.3, proj.4 4.9.3, lwgeom 2.3.2 r15302
+#> Linking to GEOS 3.6.1, GDAL 2.2.0, proj.4 4.9.3, lwgeom 2.3.2 r15302
 library(tidyverse)
 
 d <- tibble::tribble(
@@ -48,9 +48,7 @@ Convert this to a simple features object and transform to the Ohio South project
 
 ``` r
 d <- d %>%
-    mutate(geometry = map2(lon, lat, ~ st_point(c(.x,.y)))) %>%
-    mutate(geometry = st_sfc(geometry, crs=4326)) %>%
-    st_sf() %>%
+  st_as_sf(coords = c('lon', 'lat'), crs=4326) %>% 
     st_transform(3735)
 ```
 
@@ -71,24 +69,18 @@ To estimate the exposures, we will first overlay the locations with the PM2.5 ex
 
 ``` r
 ( d <- st_join(d, pm_grid) )
-#> Simple feature collection with 5 features and 6 fields
+#> Simple feature collection with 5 features and 4 fields
 #> geometry type:  POINT
 #> dimension:      XY
 #> bbox:           xmin: 1347996 ymin: 414089 xmax: 1426020 ymax: 466143.5
 #> epsg (SRID):    3735
 #> proj4string:    +proj=lcc +lat_1=40.03333333333333 +lat_2=38.73333333333333 +lat_0=38 +lon_0=-82.5 +x_0=600000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=us-ft +no_defs
-#>       id       lon      lat  case_date control_date pm_grid_id
-#> 1 809089 -84.69127 39.24711 2015-01-26   2015-02-02       3016
-#> 2 813233 -84.47798 39.12006 2015-10-25   2015-11-01       4249
-#> 3 814881 -84.47124 39.26313 2015-12-09   2015-12-16       2954
-#> 4 799697 -84.41742 39.18541 2015-04-08   2015-04-15       3687
-#> 5 799698 -84.41395 39.18322 2015-03-03   2015-03-10       3688
-#>                         geometry
-#> 1 POINT(1347996.00072967 4617...
-#> 2 POINT(1407369.99971281 4140...
-#> 3 POINT(1410421.21278463 4661...
-#> 4 POINT(1425054.3010004 43751...
-#> 5 POINT(1426019.99893813 4366...
+#>       id  case_date control_date pm_grid_id                       geometry
+#> 1 809089 2015-01-26   2015-02-02       3016 POINT(1347996.00072967 4617...
+#> 2 813233 2015-10-25   2015-11-01       4249 POINT(1407369.99971281 4140...
+#> 3 814881 2015-12-09   2015-12-16       2954 POINT(1410421.21278463 4661...
+#> 4 799697 2015-04-08   2015-04-15       3687 POINT(1425054.3010004 43751...
+#> 5 799698 2015-03-03   2015-03-10       3688 POINT(1426019.99893813 4366...
 ```
 
 Gather the `case_date` and `control_dates` into one `date` columns with a corresponding `event` column.
@@ -103,23 +95,23 @@ Merge the "lookup grid" (`pm_grid`) into the dataset by using `pm_grid_id` and `
 
 ``` r
 ( d <- left_join(d, pm_data, by=c('pm_grid_id', 'date')) )
-#> Simple feature collection with 10 features and 7 fields
+#> Simple feature collection with 10 features and 5 fields
 #> geometry type:  POINT
 #> dimension:      XY
 #> bbox:           xmin: 1347996 ymin: 414089 xmax: 1426020 ymax: 466143.5
 #> epsg (SRID):    3735
 #> proj4string:    +proj=lcc +lat_1=40.03333333333333 +lat_2=38.73333333333333 +lat_0=38 +lon_0=-82.5 +x_0=600000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=us-ft +no_defs
-#>        id       lon      lat pm_grid_id   event       date   pm_pred
-#> 1  809089 -84.69127 39.24711       3016    case 2015-01-26 18.352060
-#> 2  813233 -84.47798 39.12006       4249    case 2015-10-25  6.133256
-#> 3  814881 -84.47124 39.26313       2954    case 2015-12-09 14.948439
-#> 4  799697 -84.41742 39.18541       3687    case 2015-04-08  6.677391
-#> 5  799698 -84.41395 39.18322       3688    case 2015-03-03 13.853499
-#> 6  809089 -84.69127 39.24711       3016 control 2015-02-02  6.008283
-#> 7  813233 -84.47798 39.12006       4249 control 2015-11-01  7.499119
-#> 8  814881 -84.47124 39.26313       2954 control 2015-12-16  8.122611
-#> 9  799697 -84.41742 39.18541       3687 control 2015-04-15  6.207844
-#> 10 799698 -84.41395 39.18322       3688 control 2015-03-10 14.304821
+#>        id pm_grid_id   event       date   pm_pred
+#> 1  809089       3016    case 2015-01-26 18.352060
+#> 2  813233       4249    case 2015-10-25  6.133256
+#> 3  814881       2954    case 2015-12-09 14.948439
+#> 4  799697       3687    case 2015-04-08  6.677391
+#> 5  799698       3688    case 2015-03-03 13.853499
+#> 6  809089       3016 control 2015-02-02  6.008283
+#> 7  813233       4249 control 2015-11-01  7.499119
+#> 8  814881       2954 control 2015-12-16  8.122611
+#> 9  799697       3687 control 2015-04-15  6.207844
+#> 10 799698       3688 control 2015-03-10 14.304821
 #>                          geometry
 #> 1  POINT(1347996.00072967 4617...
 #> 2  POINT(1407369.99971281 4140...
