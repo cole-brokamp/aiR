@@ -32,3 +32,23 @@ NULL
 #' @format A simple features object continaing the coordinate geometry and
 #'   corresponding \code{pm_grid_id}.
 "pm_grid"
+
+#' Daily Weather data.
+#'
+#' Daily weather data for study area used within the PM2.5 prediction model.
+#' Derived from the NCEP North American Regional Reanalysis (NARR).
+#'
+#' @format A tibble with nine variables:
+#' \describe{
+#' \item{\code{vis}}{visibility}
+#' \item{\code{hpbl}}{planetary boundary height (m)}
+#' \item{\code{air.2m}}{air temperature at 2 m (K)}
+#' \item{\code{rhum.2m}}{relative humidity at 2m}
+#' \item{\code{prate}}{precipitation rate (kg/m^2/s)}
+#' \item{\code{apcp}}{accumulated total precipitation (kg/m^2)}
+#' \item{\code{pres.sfc}}{pressure (Pa)}
+#' \item{\code{uwnd.10m}}{U-wind at 10 m (m/s)}
+#' \item{\code{vwnd.10m}}{V-wind at 10 m (m/s)}
+#' }
+"narr_data"
+

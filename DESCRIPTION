@@ -1,13 +1,18 @@
 Package: aiR
-Title: Daily, 1 x 1 km PM2.5 Exposure Assessment for Cincinnati, OH (2000 - 2015)
+Title: Daily, 1 x 1 km PM2.5 Exposure Assessment for Cincinnati, OH (2000 -
+    2015)
 Version: 0.0.0.9000
 Authors@R: person("Cole", "Brokamp", email = "cole.brokamp@gmail.com", role = c("aut", "cre"))
-Description: Daily, 1 x 1 km PM2.5 Exposure Assessment for Cincinnati, OH (2000 - 2015)
-Depends: R (>= 3.3.2)
+Description: Daily, 1 x 1 km PM2.5 Exposure Assessment for Cincinnati, OH (2000
+    - 2015)
+Depends:
+    R (>= 3.3.2)
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Imports: sf,
+Imports:
+    sf,
     tidyverse
 URL: https://github.com/cole-brokamp/aiR
 BugReports: https://github.com/cole-brokamp/aiR/issues
+RoxygenNote: 5.0.1

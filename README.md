@@ -93,3 +93,32 @@ Then merge the "lookup grid" (`pm_grid`) into the dataset by using `pm_grid_id` 
 #> 4 799697 2015-04-08       3687  6.677391 POINT(1425054.3010004 43751...
 #> 5 799698 2015-03-03       3688 13.853499 POINT(1426019.99893813 4366...
 ```
+
+Example adding weather data
+---------------------------
+
+Several NARR weather variables are available as daily means for the entire study area in the `narr_data` R object. View the help (`?narr_data`) to see more details about the individual variables.
+
+To merge in humidity and temperature, we will subset `narr_data` to those variables and join to our dataset:
+
+``` r
+( d <- left_join(d, narr_data %>% select(date, air.2m, rhum.2m), by='date') )
+#> Simple feature collection with 5 features and 6 fields
+#> geometry type:  POINT
+#> dimension:      XY
+#> bbox:           xmin: 1347996 ymin: 414089 xmax: 1426020 ymax: 466143.5
+#> epsg (SRID):    3735
+#> proj4string:    +proj=lcc +lat_1=40.03333333333333 +lat_2=38.73333333333333 +lat_0=38 +lon_0=-82.5 +x_0=600000 +y_0=0 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=us-ft +no_defs
+#>       id       date pm_grid_id   pm_pred   air.2m  rhum.2m
+#> 1 809089 2015-01-26       3016 18.352060 273.4738 84.21274
+#> 2 813233 2015-10-25       4249  6.133256 289.7672 72.24364
+#> 3 814881 2015-12-09       2954 14.948439 279.5706 86.86406
+#> 4 799697 2015-04-08       3687  6.677391 292.4687 84.62123
+#> 5 799698 2015-03-03       3688 13.853499 271.8341 87.85282
+#>                         geometry
+#> 1 POINT(1347996.00072967 4617...
+#> 2 POINT(1407369.99971281 4140...
+#> 3 POINT(1410421.21278463 4661...
+#> 4 POINT(1425054.3010004 43751...
+#> 5 POINT(1426019.99893813 4366...
+```

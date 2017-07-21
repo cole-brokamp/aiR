@@ -89,6 +89,11 @@ Then merge the "lookup grid" (`pm_grid`) into the dataset by using `pm_grid_id` 
 
 ## Example adding weather data
 
+Several NARR weather variables are available as daily means for the entire study area in the `narr_data` R object. View the help (`?narr_data`) to see more details about the individual variables.
 
+To merge in humidity and temperature, we will subset `narr_data` to those variables and join to our dataset:
 
+```{r}
+( d <- left_join(d, narr_data %>% select(date, air.2m, rhum.2m), by='date') )
+```
 
