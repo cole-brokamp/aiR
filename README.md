@@ -1,3 +1,5 @@
+🛑 This repository has been deprecated in favor of an updated model located at: https://github.com/degauss-org/pm 🛑
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 aiR
